@@ -9,8 +9,8 @@ module StaticIsh
     end
     
     def call(env)
-      try_static(env)
-        || try_content(env)
+      try_static(env) \
+        || try_content(env) \
         || [404, {'Content-Type' => 'text/html'}, "<h1>404 Page Not Found</h1>"]
     end
     
@@ -38,7 +38,9 @@ module StaticIsh
     
     def try_content(env)
       if page = @site[env['PATH_INFO']]
-        
+        [ 200,
+          {"Content-Type" => "text/html"},
+          RenderingContext.new(@site, page).__render ]
       else
         nil
       end

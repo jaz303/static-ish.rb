@@ -11,6 +11,10 @@ module StaticIsh
         @source, @options = source, defaults.update(options)
       end
       
+      def id
+        @options[:id]
+      end
+      
       def defaults
         {}
       end

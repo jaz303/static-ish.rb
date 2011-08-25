@@ -1,3 +1,4 @@
+require 'erb'
 require 'yaml'
 
 module StaticIsh
@@ -6,8 +7,8 @@ module StaticIsh
   autoload :Application,            'static_ish/application'              # Rack application
   
   autoload :ApplicationAware,       'static_ish/application_aware'        # Mixin for exposing site to other classes
-  autoload :PageLoader,             'static_ish/page_loader'              # Loads/assembles pages from the filesystem
   autoload :Registry,               'static_ish/registry'                 # Directory of known page/part types
+  autoload :RenderingContext,       'static_ish/rendering_context'
   
   module Pages
     autoload :Base,                 'static_ish/pages/base'               # Base page implementation

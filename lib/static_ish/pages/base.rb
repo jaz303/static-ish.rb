@@ -1,21 +1,32 @@
 module StaticIsh
   module Pages
     class Base
-      attr_accessor :parent
-      attr_reader :path
-      attr_reader :parts
+      attr_reader :site         # site to which this page belongs
+      attr_reader :path         # absolute FS path to this page
+      attr_reader :parts        # array of page parts
+      attr_accessor :parent     # parent page
       
       def [](k);      @preamble[k.to_sym];          end
       def []=(k,v);   @preamble[k.to_sym] = v;      end
       
-      def initialize(path, preamble = {}, parts = [])
-        @path, @preamble, @parts = path, preamble, parts
+      def initialize(site, path, preamble = {}, parts = [])
+        preamble = preamble.inject({}) { |h,(k,v)| h[k.to_sym] = v; h }
+        @site, @path, @preamble, @parts = site, path, preamble, parts
+      end
+      
+      def type
+        @type ||= @site.registry.page_type(self)
+      end
+      
+      def part(ix)
+        part.is_a?(Fixnum) ? parts[ix] : (parts.find { |p| p.id == ix })
       end
       
       def self.preamble_reader(key, default = nil)
         define_method(key) { self[key] || default }
       end
       
+      preamble_reader :layout
       preamble_reader :title
       preamble_reader :subtitle
     end

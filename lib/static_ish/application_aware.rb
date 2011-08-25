@@ -1,7 +1,11 @@
 module StaticIsh
   module ApplicationAware
+    def site
+      @site
+    end
+    
     def registry
-      @app.registry
+      @site.registry
     end
   end
 end

@@ -1,6 +1,10 @@
 module StaticIsh
   class Registry
-    def initialize
+    include ApplicationAware
+    
+    def initialize(site)
+      @site = site
+      
       @page_types = {
         :page             => '::StaticIsh::Pages::Page'
       }
@@ -21,16 +25,26 @@ module StaticIsh
       @part_types[name.to_sym] = klass
     end
     
-    def build_page(path, type, preamble = {}, parts = [])
+    def page_class(type)
       klass = @page_types[type.to_sym]
       klass = eval(klass) if klass.is_a?(String)
-      klass.new(path, preamble, parts)
+      klass
     end
     
+    def page_type(page_class)
+      reverse_page_types[page_class.is_a?(Class) ? page_class : page_class.class]
+    end
+
     def build_part(type, source = '', options = {})
       klass = @part_types[type.to_sym]
       klass = eval(klass) if klass.is_a?(String)
       klass.new(source, options)
     end
+    
+  private
+    def reverse_page_types
+      @reverse_page_types ||= @page_types.inject({}) { |h,(k,v)| h[v.is_a?(String) ? eval(v) : v] = k; h }
+    end
+  
   end
 end
