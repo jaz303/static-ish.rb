@@ -1,10 +1,12 @@
 module StaticIsh
   class Site
     attr_reader :root
+    attr_reader :public_root
     attr_reader :registry
     
     def initialize(root)
       @root = File.expand_path(root)
+      @public_root = File.join(@root, 'public')
       @registry = Registry.new
     end
     
