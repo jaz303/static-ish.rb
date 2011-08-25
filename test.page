@@ -1,0 +1,16 @@
+type: page
+comments_slug: foobar
+template: boom
+
+--- html
+
+this is some html content
+
+--- markdown
+
+this is some markdown content
+
+--- code language: "php"
+
+this is some code content
+
