@@ -1,5 +1,3 @@
-require 'yaml'
-
 module StaticIsh
   class PageLoader
     include ApplicationAware

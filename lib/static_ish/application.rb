@@ -1,14 +1,11 @@
 module StaticIsh
   class Application
-    attr_reader :registry
-    
-    def initialize
-      @registry = Registry.new
+    def initialize(site)
+      @site = site
     end
     
-    def create_page_loader
-      PageLoader.new(self)
+    def call(env)
+      [200, {'Content-Type' => 'text/html'}, "<h1>Hello!</h1>"]
     end
-    
   end
 end

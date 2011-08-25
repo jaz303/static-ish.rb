@@ -1,8 +1,14 @@
+require 'rubygems'
+require 'rack'
+
 $:.unshift(File.dirname(__FILE__) + '/lib')
+require 'static_ish'
 
-require 'lib/static_ish'
+site = StaticIsh::Site.new('test-site')
+puts "test site: #{site.root}"
 
-app = StaticIsh::Application.new
-loader = app.create_page_loader
+builder = Rack::Builder.new do
+  run StaticIsh::Application.new(site)
+end
 
-p loader.load('test.page')
+Rack::Handler::Mongrel.run builder, :Port => 4000
