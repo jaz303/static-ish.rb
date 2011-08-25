@@ -7,7 +7,7 @@ module StaticIsh
     attr_reader :home             # home page
     
     def [](path)
-      home
+      home.find_page(path)
     end
     
     def initialize(root)

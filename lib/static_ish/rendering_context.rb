@@ -3,9 +3,10 @@ module StaticIsh
     def site; @__site; end
     def page; @__page; end
     def parts; page.parts; end
+    def part; @__parts.last; end
     
     def initialize(site, page)
-      @__site, @__page = site, page
+      @__site, @__page, @__parts = site, page, []
     end
     
     def h(html)
@@ -14,6 +15,17 @@ module StaticIsh
     
     def content_for_layout
       @content_for_layout || ''
+    end
+    
+    def render_parts(parts = nil)
+      (parts || page.parts).map { |p| render_part(p) }.join("\n")
+    end
+    
+    def render_part(part)
+      @__parts << part
+      res = __render_erb(__part_template_path(part))
+      @__parts.pop
+      res
     end
     
     def __render
@@ -43,6 +55,10 @@ module StaticIsh
         ].detect { |t| File.exists?(t) }
       end
       @__page_template_path
+    end
+    
+    def __part_template_path(part)
+      File.join(site.view_root, 'parts', part.type.to_s, 'part.html.erb')
     end
   end
 end

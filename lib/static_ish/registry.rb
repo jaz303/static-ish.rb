@@ -23,6 +23,8 @@ module StaticIsh
     
     def register_part(name, klass)
       @part_types[name.to_sym] = klass
+      klass.type = name if klass.is_a?(Class)
+      nil
     end
     
     def page_class(type)
@@ -37,7 +39,11 @@ module StaticIsh
 
     def build_part(type, source = '', options = {})
       klass = @part_types[type.to_sym]
-      klass = eval(klass) if klass.is_a?(String)
+      if klass.is_a?(String)
+        klass = eval(klass)
+        klass.type = type
+        @part_types[type.to_sym] = klass
+      end
       klass.new(source, options)
     end
     

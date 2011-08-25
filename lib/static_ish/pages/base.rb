@@ -12,6 +12,17 @@ module StaticIsh
       def initialize(site, path, preamble = {}, parts = [])
         preamble = preamble.inject({}) { |h,(k,v)| h[k.to_sym] = v; h }
         @site, @path, @preamble, @parts = site, path, preamble, parts
+        
+        relative_path = path[@site.public_root.length..-1]
+        p relative_path
+      end
+      
+      def url
+        if parent.nil?
+          url_component
+        else
+          File.join(parent.url, url_component)
+        end
       end
       
       def type
@@ -29,6 +40,10 @@ module StaticIsh
       preamble_reader :layout
       preamble_reader :title
       preamble_reader :subtitle
+      
+      def find_page(path)
+        self
+      end
     end
   end
 end
