@@ -9,21 +9,24 @@ module StaticIsh
     end
     
     def call(env)
-      path = env['PATH_INFO']
-      try_static(env) || try_content(env)
+      try_static(env)
+        || try_content(env)
+        || [404, {'Content-Type' => 'text/html'}, "<h1>404 Page Not Found</h1>"]
     end
     
   private
   
     def try_static(env)
-      candidates = [path]
-      if File.directory?(File.join(@root, candidates[0]))
+      path = env['PATH_INFO']
+      if File.directory?(File.join(@root, path))
         if path[-1,1] != '/'
           response = Rack::Response.new
           response.redirect(path + '/')
           return response
         end
-        candidates = STATIC_INDEX.map { |si| File.join(candidates[0], si) }
+        candidates = STATIC_INDEX.map { |si| File.join(path, si) }
+      else
+        candidates = [path]
       end
       
       if (static_file = candidates.detect { |c| File.exists?(File.join(@root, c)) })
@@ -34,7 +37,11 @@ module StaticIsh
     end
     
     def try_content(env)
-      [200, {'Content-Type' => 'text/html'}, "<h1>Hello!</h1>"]
+      if page = @site[env['PATH_INFO']]
+        
+      else
+        nil
+      end
     end
   end
 end
