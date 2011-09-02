@@ -12,7 +12,9 @@ module StaticIsh
   
   module Pages
     autoload :Base,                 'static_ish/pages/base'               # Base page implementation
+    autoload :Blog,                 'static_ish/pages/blog'
     autoload :Page,                 'static_ish/pages/page'               # Default page type
+    autoload :Post,                 'static_ish/pages/post'
   end
   
   module Parts
@@ -22,5 +24,4 @@ module StaticIsh
     autoload :Markdown,             'static_ish/parts/markdown'
     autoload :Textile,              'static_ish/parts/textile'
   end
-  
 end

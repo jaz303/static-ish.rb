@@ -6,7 +6,9 @@ module StaticIsh
       @site = site
       
       @page_types = {
-        :page             => '::StaticIsh::Pages::Page'
+        :page             => '::StaticIsh::Pages::Page',
+        :blog             => '::StaticIsh::Pages::Blog',
+        :post             => '::StaticIsh::Pages::Post'
       }
     
       @part_types = {

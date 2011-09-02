@@ -7,6 +7,7 @@ module StaticIsh
     attr_reader :home             # home page
     
     def [](path)
+      path = path.gsub(/(^\/+|\/+$)/, '').gsub(/\/+/, '/')
       home.find_page(path)
     end
     
@@ -19,16 +20,17 @@ module StaticIsh
     end
     
     def home
-      @home ||= load_page(File.join(public_root, 'index.page'))
+      unless @home
+        @home = load_page(File.join(public_root, 'index.page'))
+        @home.url = '/'
+      end
+      @home
     end
     
     def reload!
       @home = nil
     end
 
-  private
-    DEFAULT_PREAMBLE = {'layout' => 'main', 'type' => 'page'}
-  
     def load_page(path)
       @parts, @part, @preamble, @buffer = [], nil, DEFAULT_PREAMBLE.dup, ''
       
@@ -47,6 +49,9 @@ module StaticIsh
       page = page_klass.new(self, path, @preamble, @parts)
       page
     end
+    
+  private
+    DEFAULT_PREAMBLE = {'layout' => 'main', 'type' => 'page'}
     
     def commit_part!
       if @part.nil?
